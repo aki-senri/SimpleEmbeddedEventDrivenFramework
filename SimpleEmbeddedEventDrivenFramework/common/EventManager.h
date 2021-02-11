@@ -13,7 +13,7 @@ public :
 	EventManager(std::mutex *mutex);
 	~EventManager();
 
-	enum EventError {
+	enum class EventError {
 		EventOK = 0,
 		ErrorQueueFull,
 		ErrorQueueEmpty,

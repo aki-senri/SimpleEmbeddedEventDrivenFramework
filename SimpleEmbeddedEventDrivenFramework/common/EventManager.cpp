@@ -29,12 +29,12 @@ EventManager::EventError EventManager::Run()
 		}
 		this_thread::sleep_for(chrono::milliseconds(1));
 	}
-	return EventOK;
+	return EventError::EventOK;
 }
 
 EventManager::EventError EventManager::EventEnqueue(unique_ptr<EventQueue> event)
 {
-	EventError error = EventOK;
+	EventError error = EventError::EventOK;
 
 	if (queue_table_.size() < EventQueueSize)
 	{
@@ -53,9 +53,9 @@ EventManager::EventError EventManager::Stop()
 {
 	if (run_continue_ == false)
 	{
-		return ErrorNotRun;
+		return EventError::ErrorNotRun;
 	}
-	return EventOK;
+	return EventError::EventOK;
 }
 
 void EventManager::SetMutex(std::mutex* mutex)
@@ -65,7 +65,7 @@ void EventManager::SetMutex(std::mutex* mutex)
 
 EventManager::EventError EventManager::EventDequeue()
 {
-	EventError error = EventOK;
+	EventError error = EventError::EventOK;
 
 	if (queue_table_.size() > 0)
 	{
@@ -74,6 +74,6 @@ EventManager::EventError EventManager::EventDequeue()
 		queue_table_.pop();
 	}
 
-	return ErrorQueueEmpty;
+	return EventError::ErrorQueueEmpty;
 }
 
