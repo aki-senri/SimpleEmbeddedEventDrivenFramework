@@ -6,7 +6,7 @@ cmake_minimum_required (VERSION 3.8)
 include_directories(common)
 
 # ソースをこのプロジェクトの実行可能ファイルに追加します。
-add_executable (SimpleEmbeddedEventDrivenFramework "SimpleEmbeddedEventDrivenFramework.cpp" "SimpleEmbeddedEventDrivenFramework.h" "common/EventManager.cpp" "common/EventManager.h" "common/EventQueue.cpp" "common/EventQueue.h" )
+add_executable (SimpleEmbeddedEventDrivenFramework "SimpleEmbeddedEventDrivenFramework.cpp" "SimpleEmbeddedEventDrivenFramework.h" "common/EventManager.cpp" "common/EventManager.h" "common/EventQueue.cpp" "common/EventQueue.h"  "common/TCPClient.cpp" "common/TCPClient.h")
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
