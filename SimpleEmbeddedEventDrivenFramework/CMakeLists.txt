@@ -8,6 +8,10 @@ include_directories(common)
 # ソースをこのプロジェクトの実行可能ファイルに追加します。
 add_executable (SimpleEmbeddedEventDrivenFramework "SimpleEmbeddedEventDrivenFramework.cpp" "SimpleEmbeddedEventDrivenFramework.h" "common/EventManager.cpp" "common/EventManager.h" "common/EventQueue.cpp" "common/EventQueue.h"  "common/TCPClient.cpp" "common/TCPClient.h")
 
+if(WIN32)
+  target_link_libraries(SimpleEmbeddedEventDrivenFramework ws2_32 wsock32)
+endif()
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 

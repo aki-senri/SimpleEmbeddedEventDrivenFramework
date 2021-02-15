@@ -1,20 +1,18 @@
+#include "TCPClient.h"
 
-#ifdef WIN32
-#include <WinSock2.h>
-#include <ws2tcpip.h>
-#elif __unix__
-#else
-#endif
-
+#include <stdio.h>
 #include <string>
 
 using namespace std;
 
-bool CreateTCPSocket(int& socket_fd)
+bool CreateTCPSocket(SOCKET& socket_fd)
 {
 #ifdef WIN32
 	WSADATA data;
-	WSAStartup(MAKEWORD(2,0),&data);
+	if (WSAStartup(MAKEWORD(2, 0), &data) != 0)
+	{
+		return false;
+	}	
 #else
 #endif
 	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -27,15 +25,18 @@ bool CreateTCPSocket(int& socket_fd)
 	return true;
 }
 
-bool TCPConnect(const int socket_fd, const string& dest_ip, const unsigned short& dst_port)
+bool TCPConnect(const SOCKET socket_fd, const string& dest_ip, const unsigned short& dest_port)
 {
-	struct sockaddr_in dstAddr = { 0 };
+	struct sockaddr_in dest_addr = { 0 };
 
-	dstAddr.sin_port = htons(dst_port);
-	dstAddr.sin_family = AF_INET;
-	dstAddr.sin_addr.s_addr = inet_addr(dest_ip.c_str());
+	dest_addr.sin_port = htons(dest_port);
+	dest_addr.sin_family = AF_INET;
+	if (inet_pton(AF_INET, dest_ip.c_str(), &dest_addr.sin_addr.s_addr) != 1)
+	{
+		return false;
+	}
 
-	if (connect(socket_fd, (struct sockaddr*)&dstAddr, sizeof(dstAddr)) != 0)
+	if (connect(socket_fd, (struct sockaddr*)&dest_addr, sizeof(dest_addr)) != 0)
 	{
 		return false;
 	}
@@ -43,9 +44,26 @@ bool TCPConnect(const int socket_fd, const string& dest_ip, const unsigned short
 	return true;
 }
 
-bool TCPSend(const int socket_fd, const byte data, const unsigned int len)
+bool TCPSend(const SOCKET socket_fd, const byte data[], const unsigned int len)
 {
+	if (send(socket_fd, (char*)data, len, 0) < 0)
+	{
+		return false;
+	}
 	return true;
 }
 
+bool TCPReceive(const SOCKET socket_fd, byte data[], const unsigned int len, int& recv_len)
+{
+	int result = recv(socket_fd, (char*)data, len, 0);
+
+	if(result < 0)
+	{
+		return false;
+	}
+
+	recv_len = result;
+
+	return true;
+}
 

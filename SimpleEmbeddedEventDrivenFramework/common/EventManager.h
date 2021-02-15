@@ -3,7 +3,9 @@
 #include <queue>
 #include <memory>
 #include <mutex>
+#include <string>
 #include "EventQueue.h"
+#include "TCPClient.h"
 
 using namespace std;
 
@@ -26,7 +28,7 @@ public :
 	void SetMutex(std::mutex* mutex);
 
 private:
-	std::queue<EventQueue> queue_table_;
+	std::queue<unique_ptr<EventQueue>> queue_table_;
 	const int EventQueueSize = 32;
 	std::mutex *mutex_;
 	bool run_continue_ = false;

@@ -29,6 +29,7 @@ EventManager::EventError EventManager::Run()
 		}
 		this_thread::sleep_for(chrono::milliseconds(1));
 	}
+
 	return EventError::EventOK;
 }
 
@@ -38,7 +39,8 @@ EventManager::EventError EventManager::EventEnqueue(unique_ptr<EventQueue> event
 
 	if (queue_table_.size() < EventQueueSize)
 	{
-
+		std::lock_guard<mutex> lock(*mutex_);
+		queue_table_.push(std::move(event));
 	}
 	else
 	{
@@ -69,7 +71,7 @@ EventManager::EventError EventManager::EventDequeue()
 
 	if (queue_table_.size() > 0)
 	{
-		queue_table_.front().ExecuteEvent();
+		queue_table_.front()->ExecuteEvent();
 		std::lock_guard<mutex> lock(*mutex_);
 		queue_table_.pop();
 	}
