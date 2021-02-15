@@ -42,3 +42,10 @@ bool TCPConnect(const int socket_fd, const string& dest_ip, const unsigned short
 
 	return true;
 }
+
+bool TCPSend(const int socket_fd, const byte data, const unsigned int len)
+{
+	return true;
+}
+
+
