@@ -5,7 +5,6 @@
 #include <mutex>
 #include <string>
 #include "EventQueue.h"
-#include "TCPClient.h"
 
 using namespace std;
 

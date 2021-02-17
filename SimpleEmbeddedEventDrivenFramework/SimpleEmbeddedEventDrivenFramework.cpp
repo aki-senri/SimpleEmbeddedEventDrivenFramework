@@ -4,7 +4,6 @@
 #include "SimpleEmbeddedEventDrivenFramework.h"
 #include "EventManager.h"
 
-
 using namespace std;
 
 int main()

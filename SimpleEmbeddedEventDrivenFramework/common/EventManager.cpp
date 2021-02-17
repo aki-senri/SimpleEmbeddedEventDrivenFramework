@@ -1,7 +1,7 @@
 #include "EventManager.h"
 #include <mutex>
 #include <thread>
-
+#include "Timer.h"
 
 EventManager::EventManager()
 {
