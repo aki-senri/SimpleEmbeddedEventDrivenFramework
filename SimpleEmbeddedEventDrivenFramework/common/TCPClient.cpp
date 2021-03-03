@@ -25,6 +25,28 @@ bool CreateTCPSocket(SOCKET& socket_fd)
 	return true;
 }
 
+bool CloseTCPSocket(const SOCKET socket_fd)
+{
+#ifdef WIN32
+	int result = closesocket(socket_fd);
+	if (result < 0)
+	{
+		return false;
+	}
+
+	if (WSACleanup() < 0)
+	{
+		return false;
+	}
+#else
+	if (close(socket_fd) < 0)
+	{
+
+	}
+#endif
+	return true;
+}
+
 bool TCPConnect(const SOCKET socket_fd, const string& dest_ip, const unsigned short& dest_port)
 {
 	struct sockaddr_in dest_addr = { 0 };
