@@ -54,16 +54,13 @@ bool TCPServer::CloseSocket()
 	return true;
 }
 
-bool TCPServer::Listen(const std::string& dest_ip, const unsigned short& dest_port, int backlog)
+bool TCPServer::Listen(const unsigned short dest_port, int backlog)
 {
 	struct sockaddr_in dest_addr = { 0 };
 
 	dest_addr.sin_port = htons(dest_port);
 	dest_addr.sin_family = AF_INET;
-	if (inet_pton(AF_INET, dest_ip.c_str(), &dest_addr.sin_addr.s_addr) != 1)
-	{
-		return false;
-	}
+	dest_addr.sin_addr.s_addr = ADDR_ANY;
 
 	if (bind(socket_, (struct sockaddr*)&dest_addr, sizeof(dest_addr)) != 0)
 	{
@@ -92,5 +89,10 @@ SOCKET TCPServer::Accept()
 	}
 
 	return dest_socket;
+}
+
+bool TCPServer::Recieve(byte recieve_data[], unsigned int& recieve_size)
+{
+	return false;
 }
 

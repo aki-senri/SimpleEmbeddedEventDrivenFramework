@@ -24,8 +24,9 @@ public:
 	bool CreateSocket();
 	bool CloseSocket();
 
-	bool Listen(const std::string& dest_ip, const unsigned short& dest_port, int backlog);
+	bool Listen(const unsigned short dest_port, int backlog = SOMAXCONN);
 	SOCKET Accept();
+	bool Recieve(byte recieve_data[], unsigned int& recieve_size);
 
 private:
 	SOCKET socket_;

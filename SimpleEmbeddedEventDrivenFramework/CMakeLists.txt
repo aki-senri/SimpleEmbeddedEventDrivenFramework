@@ -6,7 +6,7 @@ cmake_minimum_required (VERSION 3.8)
 include_directories(common)
 
 # ソースをこのプロジェクトの実行可能ファイルに追加します。
-add_executable (SimpleEmbeddedEventDrivenFramework "SimpleEmbeddedEventDrivenFramework.cpp" "SimpleEmbeddedEventDrivenFramework.h" "common/EventManager.cpp" "common/EventManager.h" "common/EventQueue.cpp" "common/EventQueue.h"  "common/TCPClient.cpp" "common/TCPClient.h" "common/Timer.h" "common/Timer.cpp" "common/TCPServer.h" "common/TCPServer.cpp")
+add_executable (SimpleEmbeddedEventDrivenFramework "SimpleEmbeddedEventDrivenFramework.cpp" "SimpleEmbeddedEventDrivenFramework.h" "common/EventManager.cpp" "common/EventManager.h" "common/EventQueue.cpp" "common/EventQueue.h"  "common/TCPClient.cpp" "common/TCPClient.h" "common/Timer.h" "common/Timer.cpp" "common/TCPServer.h" "common/TCPServer.cpp"   "common/KeyValueConfig.cpp")
 
 if(WIN32)
   target_link_libraries(SimpleEmbeddedEventDrivenFramework ws2_32 wsock32)
