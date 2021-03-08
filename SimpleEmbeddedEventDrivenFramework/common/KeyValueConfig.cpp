@@ -59,13 +59,18 @@ bool KeyValueConfig::ReadConfigString(std::string config_string)
 std::vector<std::string> KeyValueConfig::StringSplit(const std::string& s, char delim) {
 	std::vector<std::string> elems;
 	std::string item;
-	for (char ch : s) {
-		if (ch == delim) {
+	for (char ch : s)
+	{
+		if (ch == delim)
+		{
 			if (!item.empty())
+			{
 				elems.push_back(item);
+			}
 			item.clear();
 		}
-		else {
+		else
+		{
 			item += ch;
 		}
 	}
@@ -82,7 +87,7 @@ bool KeyValueConfig::StringTrimLeft(std::string& str)
 {
 	bool result = false;
 
-	int head = str.find_first_not_of(' ', 0);
+	size_t head = str.find_first_not_of(' ', 0);
 
 	if (head != std::string::npos)
 	{
@@ -97,7 +102,7 @@ bool KeyValueConfig::StringTrimRight(std::string& str)
 {
 	bool result = false;
 
-	int tail = str.find_last_not_of(' ', str.length());
+	size_t tail = str.find_last_not_of(' ', str.length());
 
 	if (tail != std::string::npos)
 	{
