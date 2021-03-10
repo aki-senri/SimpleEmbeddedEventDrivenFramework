@@ -91,8 +91,27 @@ SOCKET TCPServer::Accept()
 	return dest_socket;
 }
 
-bool TCPServer::Recieve(byte recieve_data[], unsigned int& recieve_size)
+bool TCPServer::Recieve(SOCKET socket, byte recieve_data[], const unsigned int recieve_max, unsigned int& recieve_size)
 {
-	return false;
+	int result = recv(socket, (char*)recieve_data, recieve_max, 0);
+
+	if (result < 0)
+	{
+		return false;
+	}
+
+	recieve_size = result;
+
+	return true;
+}
+
+bool TCPServer::Recieve(size_t socket_index, byte recieve_data[], const unsigned int recieve_max, unsigned int& recieve_size)
+{
+	if (dest_socket_.size() < socket_index)
+	{
+		return false;
+	}
+
+	return Recieve(dest_socket_.at(socket_index), recieve_data, recieve_max, recieve_size);
 }
 
