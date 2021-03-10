@@ -3,6 +3,9 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 include_directories(common)
 
 # ソースをこのプロジェクトの実行可能ファイルに追加します。
@@ -11,8 +14,5 @@ add_executable (SimpleEmbeddedEventDrivenFramework "SimpleEmbeddedEventDrivenFra
 if(WIN32)
   target_link_libraries(SimpleEmbeddedEventDrivenFramework ws2_32 wsock32)
 endif()
-
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # TODO: テストを追加し、必要な場合は、ターゲットをインストールします。
