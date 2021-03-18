@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <iostream>
 
 class KeyValueConfig
 {
@@ -9,6 +10,7 @@ public:
 	KeyValueConfig();
 	~KeyValueConfig();
 
+	bool ReadConfigStream(std::istream& stream);
 	bool ReadConfigFile(std::string file_path);
 	bool ReadConfigString(std::string config_string);
 

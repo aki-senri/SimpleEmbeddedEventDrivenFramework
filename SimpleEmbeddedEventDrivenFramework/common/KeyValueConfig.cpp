@@ -16,21 +16,13 @@ KeyValueConfig::~KeyValueConfig()
 {
 }
 
-bool KeyValueConfig::ReadConfigFile(std::string file_path)
+bool KeyValueConfig::ReadConfigStream(std::istream& stream)
 {
-
-	return false;
-}
-
-bool KeyValueConfig::ReadConfigString(std::string config_string)
-{
-	std::istringstream config_stream(config_string);
-
-	while (config_stream.good())
+	while (stream.good())
 	{
 		std::string line;
 
-		std::getline(config_stream, line);
+		std::getline(stream, line);
 		StringTrimLeft(line);
 		if (line[0] == '#')
 		{
@@ -49,11 +41,25 @@ bool KeyValueConfig::ReadConfigString(std::string config_string)
 			StringTrimLeft(value);
 			StringTrimRight(value);
 
-			config_elements_.insert(std::pair<std::string,std::string>{ key, value });
+			config_elements_.insert(std::pair<std::string, std::string>{ key, value });
 		}
 	}
 
 	return true;
+}
+
+bool KeyValueConfig::ReadConfigFile(std::string file_path)
+{
+	std::ifstream config_stream(file_path);
+
+	return ReadConfigStream(config_stream);
+}
+
+bool KeyValueConfig::ReadConfigString(std::string config_string)
+{
+	std::istringstream config_stream(config_string);
+
+	return ReadConfigStream(config_stream);
 }
 
 std::vector<std::string> KeyValueConfig::StringSplit(const std::string& s, char delim) {
