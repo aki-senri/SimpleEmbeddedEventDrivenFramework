@@ -18,10 +18,11 @@ KeyValueConfig::~KeyValueConfig()
 
 bool KeyValueConfig::ReadConfigStream(std::istream& stream)
 {
+	std::string section_name;
+
 	while (stream.good())
 	{
 		std::string line;
-		std::string section_name;
 
 		std::getline(stream, line);
 		StringTrimLeft(line);
@@ -30,22 +31,17 @@ bool KeyValueConfig::ReadConfigStream(std::istream& stream)
 			continue;
 		}
 
-		std::vector<std::string> keyvalue = StringSplit(line, '=');
-
 		if (line[0] == '[')
 		{
 			std::string::size_type tail = line.find_last_not_of(']');
 			if (tail != std::string::npos)
 			{
-				section_name = line.substr(1, tail - 1);
-				std::map<std::string, std::string> section_map;
-				config_elements_.insert(std::pair<std::string, std::map<std::string, std::string>>{ section_name, section_map });
+				section_name = line.substr(1, tail);
 			}
-			else
-			{
-				continue;
-			}
+			continue;
 		}
+
+		std::vector<std::string> keyvalue = StringSplit(line, '=');
 
 		if (keyvalue.size() == 2)
 		{
