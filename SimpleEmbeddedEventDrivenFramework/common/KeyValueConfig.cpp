@@ -21,6 +21,7 @@ bool KeyValueConfig::ReadConfigStream(std::istream& stream)
 	while (stream.good())
 	{
 		std::string line;
+		std::string section_name;
 
 		std::getline(stream, line);
 		StringTrimLeft(line);
@@ -30,6 +31,21 @@ bool KeyValueConfig::ReadConfigStream(std::istream& stream)
 		}
 
 		std::vector<std::string> keyvalue = StringSplit(line, '=');
+
+		if (line[0] == '[')
+		{
+			std::string::size_type tail = line.find_last_not_of(']');
+			if (tail != std::string::npos)
+			{
+				section_name = line.substr(1, tail - 1);
+				std::map<std::string, std::string> section_map;
+				config_elements_.insert(std::pair<std::string, std::map<std::string, std::string>>{ section_name, section_map });
+			}
+			else
+			{
+				continue;
+			}
+		}
 
 		if (keyvalue.size() == 2)
 		{
@@ -41,7 +57,7 @@ bool KeyValueConfig::ReadConfigStream(std::istream& stream)
 			StringTrimLeft(value);
 			StringTrimRight(value);
 
-			config_elements_.insert(std::pair<std::string, std::string>{ key, value });
+			config_elements_[section_name].insert(std::pair<std::string, std::string>{ key, value });
 		}
 	}
 
