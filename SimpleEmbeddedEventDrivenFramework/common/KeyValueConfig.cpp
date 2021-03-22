@@ -18,7 +18,7 @@ KeyValueConfig::~KeyValueConfig()
 
 bool KeyValueConfig::ReadConfigStream(std::istream& stream)
 {
-	std::string section_name;
+	std::string section_name = "";
 
 	while (stream.good())
 	{
@@ -72,6 +72,39 @@ bool KeyValueConfig::ReadConfigString(std::string config_string)
 	std::istringstream config_stream(config_string);
 
 	return ReadConfigStream(config_stream);
+}
+
+bool KeyValueConfig::WriteConfigStream(std::ostream& stream)
+{
+	for(auto element : config_elements_)
+	{
+		if (element.first.size() > 0)
+		{
+			stream << "[" << element.first << "]" << std::endl;
+		}
+
+		for (auto key_value : element.second)
+		{
+			stream << key_value.first << "=" << key_value.second << std::endl;
+		}
+		stream << std::endl;
+	}
+
+	return true;
+}
+
+bool KeyValueConfig::WriteConfigFile(std::string file_path)
+{
+	std::ofstream config_stream(file_path);
+
+	return WriteConfigStream(config_stream);
+}
+
+bool KeyValueConfig::WriteConfigString(std::string config_string)
+{
+	std::ostringstream config_stream(config_string);
+
+	return WriteConfigStream(config_stream);
 }
 
 std::vector<std::string> KeyValueConfig::StringSplit(const std::string& s, char delim) {
