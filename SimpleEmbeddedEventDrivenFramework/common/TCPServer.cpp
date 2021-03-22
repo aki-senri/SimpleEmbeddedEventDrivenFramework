@@ -1,4 +1,6 @@
 #include "TCPServer.h"
+#include "Timer.h"
+#include <memory>
 
 TCPServer::TCPServer()
 {
@@ -54,6 +56,16 @@ bool TCPServer::CloseSocket()
 	return true;
 }
 
+void TCPServer::SetMaxClient(unsigned int max)
+{
+	max_client_ = max;
+}
+
+void TCPServer::SetMaxBufferSize(unsigned int max)
+{
+	max_buffer_size_ = max;
+}
+
 bool TCPServer::Listen(const unsigned short dest_port, int backlog)
 {
 	struct sockaddr_in dest_addr = { 0 };
@@ -83,11 +95,6 @@ SOCKET TCPServer::Accept()
 
 	dest_socket = accept(socket_, (struct sockaddr*)&dest_addr, &addr_size);
 
-	if (dest_socket > 0)
-	{
-		dest_socket_.push_back(dest_socket);
-	}
-
 	return dest_socket;
 }
 
@@ -105,7 +112,7 @@ bool TCPServer::Recieve(SOCKET socket, byte recieve_data[], const unsigned int r
 	return true;
 }
 
-bool TCPServer::Recieve(size_t socket_index, byte recieve_data[], const unsigned int recieve_max, unsigned int& recieve_size)
+bool TCPServer::RecieveBySocketIndex(size_t socket_index, byte recieve_data[], const unsigned int recieve_max, unsigned int& recieve_size)
 {
 	if (dest_socket_.size() < socket_index)
 	{
@@ -113,5 +120,46 @@ bool TCPServer::Recieve(size_t socket_index, byte recieve_data[], const unsigned
 	}
 
 	return Recieve(dest_socket_.at(socket_index), recieve_data, recieve_max, recieve_size);
+}
+
+bool TCPServer::StartListener(const unsigned short dest_port)
+{
+	byte *recieve_buffer = new byte[max_buffer_size_];
+	unsigned int recieve_size = 0;
+	
+	listner_running_ = true;
+	while (listner_running_)
+	{
+		if (Recieve(socket_, recieve_buffer, max_buffer_size_, recieve_size))
+		{
+			RecieveFunction(recieve_buffer, recieve_size);
+		}
+	}
+
+	delete[] recieve_buffer;
+
+	return false;
+}
+
+bool TCPServer::StopListner()
+{
+	if (listner_running_)
+	{
+		listner_running_ = false;
+		Timer thread_abort_timer;
+	}
+
+	return false;
+}
+
+bool TCPServer::StopListner(unsigned int index)
+{
+	if (listner_running_)
+	{
+		listner_running_ = false;
+		Timer thread_abort_timer;
+	}
+
+	return false;
 }
 
