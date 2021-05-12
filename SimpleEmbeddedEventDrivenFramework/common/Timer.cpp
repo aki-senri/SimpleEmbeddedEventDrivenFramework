@@ -11,9 +11,16 @@ Timer::~Timer()
 
 bool Timer::Stop()
 {
-	if (timerthread_.joinable())
+	if (timer_run_)
 	{
-		timerthread_.join();
+		timer_run_ = false;
+		cond_.notify_one();
+
+		if (timerthread_.joinable())
+		{
+			timerthread_.join();
+		}
+
 		return true;
 	}
 
